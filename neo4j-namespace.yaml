@@ -1,0 +1,5 @@
+# neo4j-namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: neo4j
