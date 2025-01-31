@@ -1,0 +1,42 @@
+# neo4j-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: neo4j-pv-0
+  namespace: neo4j
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/neo4j-0"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: neo4j-pv-1
+  namespace: neo4j
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/neo4j-1"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: neo4j-pv-2
+  namespace: neo4j
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/neo4j-2"
