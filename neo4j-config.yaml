@@ -1,0 +1,25 @@
+# neo4j-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neo4j-config
+  namespace: neo4j
+data:
+  neo4j.conf: |
+    dbms.default_listen_address=0.0.0.0
+    dbms.default_advertised_address=$(NEO4J_DBMS_ADVERTISED_ADDRESS)
+    dbms.mode=CORE
+    dbms.cluster.discovery.type=K8S
+    dbms.cluster.discovery.k8s.service-name=neo4j
+    dbms.cluster.discovery.k8s.label-selector=app=neo4j
+    dbms.cluster.initial_discovery_members=neo4j-0.neo4j.neo4j.svc.cluster.local:5000,neo4j-1.neo4j.neo4j.svc.cluster.local:5000,neo4j-2.neo4j.neo4j.svc.cluster.local:5000
+    dbms.cluster.discovery.address=0.0.0.0:5000
+    dbms.cluster.transaction.address=0.0.0.0:6000
+    dbms.cluster.raft.address=0.0.0.0:7000
+    dbms.security.auth_enabled=true
+    dbms.memory.heap.initial_size=2G
+    dbms.memory.heap.max_size=2G
+    dbms.tx_log.rotation.retention_policy=1G size
+    dbms.connector.bolt.enabled=true
+    dbms.connector.http.enabled=true
+    dbms.connector.https.enabled=true
