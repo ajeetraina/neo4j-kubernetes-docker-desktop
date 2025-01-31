@@ -1,0 +1,62 @@
+# neo4j-statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: neo4j
+  namespace: neo4j
+spec:
+  serviceName: neo4j
+  replicas: 3
+  selector:
+    matchLabels:
+      app: neo4j
+  template:
+    metadata:
+      labels:
+        app: neo4j
+    spec:
+      containers:
+      - name: neo4j
+        image: neo4j:5.15-enterprise
+        env:
+        - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+          value: "yes"
+        - name: NEO4J_AUTH
+          value: "neo4j/$(NEO4J_PASSWORD)"
+        - name: NEO4J_DBMS_ADVERTISED_ADDRESS
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        ports:
+        - containerPort: 7687
+        - containerPort: 7474
+        - containerPort: 7473
+        - containerPort: 5000
+        - containerPort: 6000
+        - containerPort: 7000
+        volumeMounts:
+        - name: neo4j-data
+          mountPath: /data
+        - name: neo4j-config
+          mountPath: /var/lib/neo4j/conf/neo4j.conf
+          subPath: neo4j.conf
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1"
+          limits:
+            memory: "8Gi"
+            cpu: "2"
+      volumes:
+      - name: neo4j-config
+        configMap:
+          name: neo4j-config
+  volumeClaimTemplates:
+  - metadata:
+      name: neo4j-data
+    spec:
+      storageClassName: manual
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
